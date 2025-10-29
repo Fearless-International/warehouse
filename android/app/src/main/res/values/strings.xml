@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Warehouse Management</string>
+    <string name="title_activity_main">Warehouse Management</string>
+    <string name="package_name">com.honeysucklepub.warehouse</string>
+    <string name="custom_url_scheme">com.honeysucklepub.warehouse</string>
+</resources>

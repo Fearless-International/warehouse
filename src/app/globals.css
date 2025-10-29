@@ -1,0 +1,413 @@
+@import "tailwindcss";
+
+/* Dark mode pattern */
+@keyframes float-pattern {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.dark-pattern {
+  background-color: transparent;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(251, 191, 36, 0.05) 35px, rgba(251, 191, 36, 0.05) 70px),
+    repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(217, 119, 6, 0.05) 35px, rgba(217, 119, 6, 0.05) 70px);
+  animation: float-pattern 20s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(243 244 246);
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgb(0 0 0);
+  border: 1px solid rgba(251, 191, 36, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(156 163 175);
+  border-radius: 10px;
+  transition: background-color 0.3s;
+  border: 2px solid rgb(243 244 246);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgb(251 191 36), rgb(217 119 6));
+  border: 2px solid rgb(0 0 0);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(107 114 128);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgb(245 158 11), rgb(251 191 36));
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  transition: background-color 0.3s ease;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s;
+}
+
+.card-hover:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  transform: translateY(-0.5rem);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.2), 0 20px 25px -5px rgb(0 0 0 / 0.5);
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgb(255 255 255 / 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgb(229 231 235);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.1), 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, rgb(37 99 235), rgb(147 51 234));
+  color: white;
+  font-weight: 500;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, rgb(29 78 216), rgb(126 34 206));
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  transform: scale(1.05);
+}
+
+.dark .btn-primary {
+  background: linear-gradient(135deg, rgb(251 191 36), rgb(217 119 6));
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+}
+
+.dark .btn-primary:hover {
+  background: linear-gradient(135deg, rgb(245 158 11), rgb(194 65 12));
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.5);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, rgb(22 163 74), rgb(5 150 105));
+  color: white;
+  font-weight: 500;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, rgb(21 128 61), rgb(4 120 87));
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  transform: scale(1.05);
+}
+
+.dark .btn-success:hover {
+  box-shadow: 0 0 20px rgba(22, 163, 74, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, rgb(220 38 38), rgb(219 39 119));
+  color: white;
+  font-weight: 500;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, rgb(185 28 28), rgb(190 24 93));
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  transform: scale(1.05);
+}
+
+.dark .btn-danger:hover {
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, rgb(202 138 4), rgb(234 88 12));
+  color: white;
+  font-weight: 500;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, rgb(161 98 7), rgb(194 65 12));
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  transform: scale(1.05);
+}
+
+.dark .btn-warning:hover {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+/* Card styles */
+.card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  border: 1px solid rgb(229 231 235);
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.dark .card {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.1), 0 4px 6px -1px rgb(0 0 0 / 0.5);
+}
+
+/* Input styles */
+input:not([type="checkbox"]):not([type="radio"]), 
+textarea, 
+select {
+  background: white;
+  border: 2px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: rgb(17 24 39);
+  transition: all 0.3s;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]), 
+.dark textarea, 
+.dark select {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  color: rgb(243 244 246);
+}
+
+input:focus:not([type="checkbox"]):not([type="radio"]), 
+textarea:focus, 
+select:focus {
+  outline: none;
+  border-color: rgb(59 130 246);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark input:focus:not([type="checkbox"]):not([type="radio"]), 
+.dark textarea:focus, 
+.dark select:focus {
+  border-color: rgb(251 191 36);
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1), 0 0 20px rgba(251, 191, 36, 0.2);
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.dark table {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+thead {
+  background: rgb(249 250 251);
+}
+
+.dark thead {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgb(229 231 235);
+  transition: background-color 0.2s;
+}
+
+.dark tbody tr {
+  border-bottom: 1px solid rgba(251, 191, 36, 0.1);
+}
+
+tbody tr:hover {
+  background: rgb(249 250 251);
+}
+
+.dark tbody tr:hover {
+  background: rgba(251, 191, 36, 0.05);
+}
+
+th, td {
+  color: rgb(17 24 39);
+}
+
+.dark th, .dark td {
+  color: rgb(243 244 246);
+}
+
+.dark th {
+  color: rgb(251 191 36);
+  font-weight: 600;
+}
+
+/* Status badges */
+.badge-pending {
+  background: rgb(254 249 195);
+  color: rgb(161 98 7);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgb(254 240 138);
+}
+
+.dark .badge-pending {
+  background: rgba(251, 191, 36, 0.2);
+  color: rgb(251 191 36);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+
+.badge-approved {
+  background: rgb(220 252 231);
+  color: rgb(22 101 52);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgb(187 247 208);
+}
+
+.dark .badge-approved {
+  background: rgba(34, 197, 94, 0.2);
+  color: rgb(134 239 172);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.badge-rejected {
+  background: rgb(254 226 226);
+  color: rgb(153 27 27);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgb(254 202 202);
+}
+
+.dark .badge-rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: rgb(252 165 165);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Dropdown animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-enter {
+  animation: slideDown 0.2s ease-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Glow effect for dark mode */
+.dark .glow-border {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+/* Text colors for dark mode */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: rgb(251 191 36);
+}
+
+.dark p, .dark span, .dark div {
+  color: rgb(243 244 246);
+}
+
+.dark .text-gray-600 {
+  color: rgb(156 163 175) !important;
+}
+
+.dark .text-gray-500 {
+  color: rgb(107 114 128) !important;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
