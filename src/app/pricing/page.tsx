@@ -16,7 +16,7 @@ export default function PricingPage() {
       name: 'Basic',
       tagline: 'Perfect for getting started',
       icon: Package,
-      price: billingCycle === 'monthly' ? 0 : 0,
+      price: billingCycle === 'monthly' ? 19 : 297,
       originalPrice: null,
       color: 'from-gray-500 to-gray-600',
       features: [

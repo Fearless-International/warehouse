@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Eye, Ban, CheckCircle, XCircle, Calendar, User, Building, DollarSign } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils/formatDate';
 
 interface License {
   _id: string;
@@ -200,25 +201,26 @@ const handleReactivate = async (licenseId: string) => {
                     )}
 
                     <div>
-                      <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Issued</p>
-                      <div className="flex items-center gap-1">
-                        <Calendar size={14} className="text-gray-500" />
-                        <span className="text-gray-700 dark:text-gray-300 text-xs">
-                          {new Date(license.issuedDate).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
+  <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Issued</p>
+  <div className="flex items-center gap-1">
+    <Calendar size={14} className="text-gray-500" />
+    <span className="text-gray-700 dark:text-gray-300 text-xs">
+      {formatDate(license.issuedDate)}
+    </span>
+  </div>
+</div>
 
-                    {license.expiryDate && (
-                      <div>
-                        <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Expires</p>
-                        <div className="flex items-center gap-1">
-                          <Calendar size={14} className="text-red-500" />
-                          <span className="text-gray-700 dark:text-gray-300 text-xs">
-                            {new Date(license.expiryDate).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
+{license.expiryDate && (
+  <div>
+    <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Expires</p>
+    <div className="flex items-center gap-1">
+      <Calendar size={14} className="text-red-500" />
+      <span className="text-gray-700 dark:text-gray-300 text-xs">
+        {formatDate(license.expiryDate)}
+      </span>
+    </div>
+  </div>
+
                     )}
                   </div>
 
@@ -235,12 +237,12 @@ const handleReactivate = async (licenseId: string) => {
                 {/* Right Side - Actions */}
                 <div className="flex md:flex-col gap-2">
                   <Link
-                    href={`/admin/licenses/${license._id}`}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
-                  >
-                    <Eye size={16} />
-                    View
-                  </Link>
+  href={`/admin/licenses/${license._id}/upgrade`}
+  className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
+>
+  <Eye size={16} />
+  Upgrade
+</Link>
                   
                   {license.status === 'active' && (
   <button
