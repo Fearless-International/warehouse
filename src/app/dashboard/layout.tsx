@@ -3,6 +3,7 @@
 import Navbar from '@/components/Navbar';
 import InstallPWA from '@/components/InstallPWA';
 import NetworkStatus from '@/components/NetworkStatus';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { revalidateLicense } from "@/lib/utils/revalidate";
@@ -68,6 +69,7 @@ export default function DashboardLayout({
       <Navbar />
       <main>{children}</main>
       <InstallPWA />
+      <PWAInstallPrompt />
     </div>
   );
 }
