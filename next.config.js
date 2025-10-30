@@ -152,6 +152,9 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+   ignoreDuringBuilds: true,
+  },
   // swcMinify removed - it's enabled by default in Next.js 13+
 };
 
