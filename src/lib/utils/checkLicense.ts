@@ -2,8 +2,28 @@ import connectDB from '@/lib/db/mongodb';
 import License from '@/lib/db/models/License';
 import SystemSettings from '@/lib/db/models/SystemSettings';
 
-export async function checkServerLicense() {
+export async function checkServerLicense(userRole?: string) {
   try {
+     // ✅ ADMIN BYPASS
+    if (userRole === 'admin') {
+      return {
+        active: true,
+        type: 'enterprise' as const,
+        features: {
+          anomalyDetection: true,
+          advancedAnalytics: true,
+          customReports: true,
+          querySystem: true,
+          mobilePWA: true,
+          apiAccess: true,
+          whiteLabel: true,
+          smsNotifications: true,
+          multiWarehouse: true,
+        },
+        maxBranches: 999,
+        maxUsers: 999
+      };
+    }
     await connectDB();
 
     // Get active license from system settings

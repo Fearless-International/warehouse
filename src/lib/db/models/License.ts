@@ -9,7 +9,6 @@ const LicenseSchema = new Schema({
   },
   clientName: { type: String, required: true },
   clientEmail: { type: String, required: true },
-  signature: { type: String, required: true },
   clientCompany: String,
   
   // License Type
@@ -66,7 +65,11 @@ const LicenseSchema = new Schema({
   amount: Number,
   currency: { type: String, default: 'USD' },
   
-  notes: String
+  notes: String,
+  generatedBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  
+  // Security
+  signature: { type: String, required: false }  // ✅ ONLY HERE, at the end
 }, { timestamps: true });
 
 export default models.License || model('License', LicenseSchema);

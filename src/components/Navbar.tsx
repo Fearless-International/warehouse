@@ -18,6 +18,25 @@ export default function Navbar() {
 
   useEffect(() => {
     // Fetch license from server API (not localStorage)
+    // ✅ Admin bypass
+  if (session?.user.role === 'admin') {
+    setLicense({
+      type: 'enterprise',
+      features: {
+        anomalyDetection: true,
+        advancedAnalytics: true,
+        customReports: true,
+        querySystem: true,
+        mobilePWA: true,
+        apiAccess: true,
+        whiteLabel: true,
+        smsNotifications: true,
+        multiWarehouse: true,
+      }
+    });
+    setLicenseLoading(false);
+    return;
+  }
     const fetchLicense = async () => {
       try {
         const res = await fetch('/api/license/check', {

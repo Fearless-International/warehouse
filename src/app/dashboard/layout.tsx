@@ -6,6 +6,7 @@ import NetworkStatus from '@/components/NetworkStatus';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { revalidateLicense } from "@/lib/utils/revalidate";
+import { useSession } from 'next-auth/react';
 
 export default function DashboardLayout({
   children,
@@ -13,8 +14,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const { data: session } = useSession();
 
   useEffect(() => {
+    // ✅ Skip heartbeat for admin
+    if (session?.user.role === 'admin') {
+      return;
+    }
+
     // ✅ Run license validation immediately
     revalidateLicense();
 
@@ -34,7 +41,7 @@ export default function DashboardLayout({
       clearInterval(revalidateInterval);
       clearInterval(heartbeatInterval);
     };
-  }, []);
+  }, [session]);
 
   const checkHeartbeat = async () => {
     try {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 export interface License {
   type: 'basic' | 'professional' | 'enterprise';
@@ -22,12 +23,37 @@ export interface License {
 }
 
 export function useLicense() {
+  const { data: session } = useSession();
   const [license, setLicense] = useState<License | null>(null);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(false);
+   
 
   useEffect(() => {
     // Fetch license from server (not localStorage)
+     if (session?.user.role === 'admin') {
+      setLicense({
+        type: 'enterprise',
+        features: {
+          anomalyDetection: true,
+          advancedAnalytics: true,
+          customReports: true,
+          querySystem: true,
+          mobilePWA: true,
+          apiAccess: true,
+          whiteLabel: true,
+          smsNotifications: true,
+          multiWarehouse: true,
+        },
+        maxBranches: 999,
+        maxUsers: 999,
+        clientName: 'System Administrator'
+      });
+      setActive(true);
+      setLoading(false);
+      return;
+    }
+
     const fetchLicense = async () => {
       try {
         const res = await fetch('/api/license/check', {
