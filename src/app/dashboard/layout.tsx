@@ -1,7 +1,6 @@
 'use client';
 
 import Navbar from '@/components/Navbar';
-import InstallPWA from '@/components/InstallPWA';
 import NetworkStatus from '@/components/NetworkStatus';
 import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import { useEffect } from 'react';
@@ -34,7 +33,7 @@ export default function DashboardLayout({
     // ✅ Run heartbeat check immediately
     checkHeartbeat();
 
-    // ✅ Run heartbeat every hour
+    // ✅ Run heartbeat every hour while app is open
     const heartbeatInterval = setInterval(checkHeartbeat, 60 * 60 * 1000);
 
     // Cleanup
@@ -50,13 +49,12 @@ export default function DashboardLayout({
         cache: 'no-store'
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        
-        if (data.action === 'redirect_to_activate') {
-          alert(`🔒 License Issue: ${data.reason}\n\nPlease reactivate your license.`);
-          router.push('/activate');
-        }
+      const data = await res.json();
+
+      // Check both response status and data validity
+      if (!res.ok || (!data.valid && data.reason)) {
+        alert(`🔒 License Issue: ${data.reason}\n\nPlease reactivate your license.`);
+        router.push('/activate');
       }
     } catch (error) {
       console.error('Heartbeat check failed:', error);
@@ -67,7 +65,6 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <NetworkStatus />
       <Navbar />
-      <InstallPWA />
       <PWAInstallPrompt />
       <main>{children}</main>
     </div>

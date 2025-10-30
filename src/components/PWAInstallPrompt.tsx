@@ -45,8 +45,8 @@ export default function PWAInstallPrompt() {
 
   // Upgrade prompt for non-professional users
   if (showUpgrade && !hasFeature('mobilePWA')) {
-    return (
-      <div className="fixed bottom-6 right-6 max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border-2 border-orange-500 z-50 animate-slideIn">
+  return (
+    <div className="fixed bottom-6 right-6 max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border-2 border-orange-500 z-[9999] animate-slideIn">
         <button
           onClick={() => setShowUpgrade(false)}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
@@ -89,8 +89,8 @@ export default function PWAInstallPrompt() {
 
   // Install prompt for professional users
   if (showPrompt && hasFeature('mobilePWA')) {
-    return (
-      <div className="fixed bottom-6 right-6 max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border-2 border-green-500 z-50 animate-slideIn">
+  return (
+    <div className="fixed bottom-6 right-6 max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border-2 border-green-500 z-[9999] animate-slideIn">
         <button
           onClick={() => setShowPrompt(false)}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
