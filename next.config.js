@@ -158,6 +158,12 @@ const nextConfig = {
    typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 0,
+    },
+  },
   // swcMinify removed - it's enabled by default in Next.js 13+
 };
 

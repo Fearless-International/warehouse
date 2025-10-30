@@ -31,29 +31,28 @@ export function useLicense() {
 
   useEffect(() => {
     // Fetch license from server (not localStorage)
-     if (session?.user.role === 'admin') {
-      setLicense({
-        type: 'enterprise',
-        features: {
-          anomalyDetection: true,
-          advancedAnalytics: true,
-          customReports: true,
-          querySystem: true,
-          mobilePWA: true,
-          apiAccess: true,
-          whiteLabel: true,
-          smsNotifications: true,
-          multiWarehouse: true,
-        },
-        maxBranches: 999,
-        maxUsers: 999,
-        clientName: 'System Administrator'
-      });
-      setActive(true);
-      setLoading(false);
-      return;
-    }
-
+  if (session?.user.role === 'admin') {
+    setLicense({
+      type: 'enterprise',
+      features: {
+        anomalyDetection: true,
+        advancedAnalytics: true,
+        customReports: true,
+        querySystem: true,
+        mobilePWA: true,
+        apiAccess: true,
+        whiteLabel: true,
+        smsNotifications: true,
+        multiWarehouse: true,
+      },
+      maxBranches: 999,
+      maxUsers: 999,
+      clientName: 'System Administrator'
+    });
+    setActive(true);
+    setLoading(false);
+    return; // ✅ STOP HERE - Don't fetch license for admin
+  }
     const fetchLicense = async () => {
       try {
         const res = await fetch('/api/license/check', {
