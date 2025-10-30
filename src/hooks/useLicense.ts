@@ -84,7 +84,7 @@ export function useLicense() {
             maxUsers: 10,
             clientName: 'Unlicensed'
           });
-          setActive(false);
+          setActive(true);
         }
       } catch (error) {
         console.error('Failed to fetch license:', error);
