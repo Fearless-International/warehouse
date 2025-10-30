@@ -4,22 +4,25 @@ import Link from 'next/link';
 import BranchActionsClient from '@/components/admin/BranchActionsClient';
 
 export default async function BranchesPage() {
+   console.log('🔍 Fetching branches...');
   await connectDB();
+  console.log('✅ Database connected');
   
   const branches = await Branch.find()
     .populate('managerId')
     .sort({ createdAt: -1 })
     .lean();
+    console.log('📦 Branches found:', branches.length);
 
   // Convert to plain objects
   const plainBranches = branches.map(branch => ({
-    _id: branch._id.toString(),
+    _id: String(branch._id),
     name: branch.name,
     code: branch.code || '',
     location: branch.location,
     isActive: branch.isActive ?? true,
     managerId: branch.managerId ? {
-      _id: branch.managerId._id.toString(),
+      _id: String(branch.managerId._id),
       name: branch.managerId.name
     } : undefined,
     createdAt: branch.createdAt ? new Date(branch.createdAt).toISOString() : new Date().toISOString()
