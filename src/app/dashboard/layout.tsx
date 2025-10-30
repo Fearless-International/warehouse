@@ -67,9 +67,9 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <NetworkStatus />
       <Navbar />
-      <main>{children}</main>
       <InstallPWA />
       <PWAInstallPrompt />
+      <main>{children}</main>
     </div>
   );
 }
