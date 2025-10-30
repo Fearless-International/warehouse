@@ -16,8 +16,9 @@ export default function UpgradeLicenseForm({ license }: any) {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  // Detect billing cycle
-  const currentAmount = license.amount || 0;
+ // Detect billing cycle
+ // At the top of the component, after state declarations:
+  const currentAmount = license.amount || LICENSE_PRICES[license.licenseType as keyof typeof LICENSE_PRICES]?.yearly || 0;
   let billingCycle: 'monthly' | 'yearly' = 'yearly';
   
   if (license.licenseType === 'basic' && currentAmount === 19) billingCycle = 'monthly';
@@ -32,12 +33,16 @@ export default function UpgradeLicenseForm({ license }: any) {
     { value: 'enterprise', label: 'Enterprise', icon: Crown, color: 'from-orange-500 to-red-500' }
   ];
 
-  // Calculate price difference
-  const getCurrentPrice = () => LICENSE_PRICES[license.licenseType as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
-  const getNewPrice = () => LICENSE_PRICES[selectedPlan as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
-  const getNewTotal = () => currentAmount + (getNewPrice() - getCurrentPrice());
-  const getPriceDifference = () => getNewPrice() - getCurrentPrice();
 
+// Update these functions:
+const getCurrentPrice = () => LICENSE_PRICES[license.licenseType as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
+const getNewPrice = () => LICENSE_PRICES[selectedPlan as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
+const getNewTotal = () => {
+  const current = currentAmount || getCurrentPrice();
+  const difference = getNewPrice() - getCurrentPrice();
+  return current + difference;
+};
+const getPriceDifference = () => getNewPrice() - getCurrentPrice();
   const handleUpgrade = async () => {
     if (selectedPlan === license.licenseType) {
       alert('Please select a different plan');
