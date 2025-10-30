@@ -158,9 +158,6 @@ const nextConfig = {
    typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    dynamicIO: true,
-  },
   // swcMinify removed - it's enabled by default in Next.js 13+
 };
 
