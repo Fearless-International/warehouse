@@ -65,9 +65,9 @@ export default function GenerateLicensePage() {
   };
 
   const planPricing = {
-    basic: { monthly: 19, yearly: 297 },
-    professional: { monthly: 49, yearly: 597 },
-    enterprise: { monthly: 149, yearly: 1497 }
+    basic: { monthly: 300, yearly: 4700 },
+  professional: { monthly: 800, yearly: 8000 },
+  enterprise: { monthly: 2400, yearly: 24000 }
   };
 
   const handleLicenseTypeChange = (type: string) => {
