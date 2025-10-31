@@ -44,7 +44,7 @@ export default function DocumentationPage() {
           title: 'Quick Start Guide',
           description: 'Get up and running in 5 minutes',
           steps: [
-            'Login with your admin credentials',
+            'Login with the/your admin credentials',
             'Generate a license key for your domain',
             'Activate the license at /activate',
             'Start managing your warehouse operations'
