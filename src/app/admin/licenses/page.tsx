@@ -74,7 +74,7 @@ export default async function AdminLicensesPage() {
             <span className="text-3xl">💰</span>
           </div>
           <p className="text-4xl font-bold text-green-900 dark:text-green-100">
-            ${stats.totalRevenue.toLocaleString()}
+            GHS{stats.totalRevenue.toLocaleString()}
           </p>
           <p className="text-xs text-green-600 dark:text-green-400 mt-2">
             Lifetime earnings
