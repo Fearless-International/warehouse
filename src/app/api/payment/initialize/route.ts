@@ -38,11 +38,17 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
+    // Get the actual domain from request headers
+    const host = req.headers.get('host');
+    const protocol = req.headers.get('x-forwarded-proto') || 'https';
+    const baseUrl = `${protocol}://${host}`;
+
     console.log('Initializing payment:', {
       email,
       amountInKobo,
       plan,
-      billingCycle
+      billingCycle,
+      baseUrl
     });
 
     // Initialize Paystack payment
@@ -62,8 +68,7 @@ export async function POST(req: NextRequest) {
           plan,
           billingCycle,
           user_id: session.user.id,
-          user_email: session.user.email,
-          cancel_action: `${process.env.NEXTAUTH_URL}/pricing`
+          user_email: session.user.email
         }
       })
     });
