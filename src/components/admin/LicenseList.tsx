@@ -191,14 +191,13 @@ const handleReactivate = async (licenseId: string) => {
                     </div>
                     
                     {license.amount && (
-                      <div>
-                        <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Amount</p>
-                        <div className="flex items-center gap-1">
-                          <DollarSign size={14} className="text-green-600" />
-                          <span className="font-bold text-green-600">${license.amount}</span>
-                        </div>
-                      </div>
-                    )}
+  <div>
+    <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Amount</p>
+    <div className="flex items-center gap-1">
+      <span className="font-bold text-green-600">₵{license.amount.toLocaleString()}</span>
+    </div>
+  </div>
+)}
 
                     <div>
   <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Issued</p>

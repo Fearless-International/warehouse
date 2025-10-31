@@ -3,23 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/db/mongodb';
 import License from '@/lib/db/models/License';
+import { LICENSE_PRICES } from '@/lib/constants/pricing';
 import { getLicenseFeatures, getLicenseLimits, generateLicenseSignature } from '@/lib/utils/licenseGenerator';
-
-// Price mapping
-const LICENSE_PRICES = {
-  basic: {
-    monthly: 19,
-    yearly: 197
-  },
-  professional: {
-    monthly: 49,
-    yearly: 497
-  },
-  enterprise: {
-    monthly: 149,
-    yearly: 1497
-  }
-};
 
 function getDefaultAmount(licenseType: string, billingCycle: 'monthly' | 'yearly' = 'yearly'): number {
   return LICENSE_PRICES[licenseType as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;

@@ -5,6 +5,7 @@ import User from '@/lib/db/models/User';
 import Branch from '@/lib/db/models/Branch';
 import Complaint from '@/lib/db/models/Complaint';
 import Link from 'next/link';
+import { BookOpen } from 'lucide-react';
 
 export default async function AdminDashboard() {
   await connectDB();
@@ -53,6 +54,13 @@ export default async function AdminDashboard() {
           <Link href="/admin/branches" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
             Manage Branches
           </Link>
+          <Link
+      href="/admin/documentation"
+      className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center gap-2"
+    >
+      <BookOpen size={20} />
+      Documentation
+    </Link>
         </div>
       </div>
 

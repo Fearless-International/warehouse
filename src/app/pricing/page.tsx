@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 import { useLicense } from '@/hooks/useLicense';
 import { Check, X, Zap, Crown, Rocket, Shield, TrendingUp, Users, Package, AlertTriangle, BarChart3, FileText, MessageSquare, Smartphone, Code, Palette, Bell, Building2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import PaystackButton from '@/components/PaystackButton';
+import { LICENSE_PRICES, CURRENCY_SYMBOL } from '@/lib/constants/pricing';
 
 export default function PricingPage() {
   const { data: session } = useSession();
@@ -16,7 +18,7 @@ export default function PricingPage() {
       name: 'Basic',
       tagline: 'Perfect for getting started',
       icon: Package,
-      price: billingCycle === 'monthly' ? 19 : 297,
+      price: billingCycle === 'monthly' ? LICENSE_PRICES.basic.monthly : LICENSE_PRICES.basic.yearly,
       originalPrice: null,
       color: 'from-gray-500 to-gray-600',
       features: [
@@ -35,14 +37,13 @@ export default function PricingPage() {
         { name: 'PWA (offline mode)', included: false },
       ],
       cta: license?.type === 'basic' ? 'Current Plan' : 'Free Forever',
-      current: license?.type === 'basic'
+      current: active && license?.type === 'basic' // ✅ Fixed
     },
     {
       name: 'Professional',
       tagline: 'Most popular for growing teams',
       icon: Zap,
-      price: billingCycle === 'monthly' ? 49 : 497,
-      originalPrice: billingCycle === 'monthly' ? 59 : 588,
+      price: billingCycle === 'monthly' ? LICENSE_PRICES.professional.monthly : LICENSE_PRICES.professional.yearly,
       popular: true,
       color: 'from-blue-500 via-purple-500 to-pink-500',
       features: [
@@ -61,15 +62,14 @@ export default function PricingPage() {
         { name: 'SMS notifications', included: false },
       ],
       cta: license?.type === 'professional' ? 'Current Plan' : 'Upgrade Now',
-      current: license?.type === 'professional',
-      savings: billingCycle === 'yearly' ? 'Save $91/year' : null
+      savings: billingCycle === 'yearly' ? 'Save ₵1,600/year' : null,
+      current: active && license?.type === 'professional' // ✅ Fixed
     },
     {
       name: 'Enterprise',
       tagline: 'For large-scale operations',
       icon: Crown,
-      price: billingCycle === 'monthly' ? 149 : 1497,
-      originalPrice: billingCycle === 'monthly' ? 179 : 2148,
+       price: billingCycle === 'monthly' ? LICENSE_PRICES.enterprise.monthly : LICENSE_PRICES.enterprise.yearly,
       color: 'from-orange-500 via-red-500 to-pink-600',
       features: [
         { name: 'Unlimited branches', included: true },
@@ -87,33 +87,33 @@ export default function PricingPage() {
         { name: 'Custom development', included: true },
       ],
       cta: license?.type === 'enterprise' ? 'Current Plan' : 'Contact Sales',
-      current: license?.type === 'enterprise',
-      savings: billingCycle === 'yearly' ? 'Save $651/year' : null
+      savings: billingCycle === 'yearly' ? 'Save ₵4,800/year' : null,
+      current: active && license?.type === 'enterprise' // ✅ Fixed
     }
   ];
 
   const addons = [
-    {
-      name: 'Admin Module',
-      description: 'Unlock admin dashboard for self-management',
-      icon: Shield,
-      price: 497,
-      features: ['Full admin access', 'User management', 'Branch control', 'System analytics']
-    },
-    {
-      name: 'Custom Branding',
-      description: 'Make it yours with your logo and colors',
-      icon: Palette,
-      price: 297,
-      features: ['Custom logo', 'Brand colors', 'Favicon', 'Email templates']
-    },
-    {
-      name: 'Priority Support',
-      description: '24/7 dedicated support team',
-      icon: Bell,
-      price: 197,
-      features: ['24/7 availability', 'Phone support', 'Slack channel', '1-hour response']
-    }
+  {
+    name: 'Admin Module',
+    description: 'Unlock admin dashboard for self-management',
+    icon: Shield,
+    price: 7952, // ₵497 USD × 16
+    features: ['Full admin access', 'User management', 'Branch control', 'System analytics']
+  },
+  {
+    name: 'Custom Branding',
+    description: 'Make it yours with your logo and colors',
+    icon: Palette,
+    price: 4752, // ₵297 USD × 16
+    features: ['Custom logo', 'Brand colors', 'Favicon', 'Email templates']
+  },
+  {
+    name: 'Priority Support',
+    description: '24/7 dedicated support team',
+    icon: Bell,
+    price: 3152, // ₵197 USD × 16
+    features: ['24/7 availability', 'Phone support', 'Slack channel', '1-hour response']
+  }
   ];
 
   return (
@@ -201,9 +201,9 @@ export default function PricingPage() {
                     </span>
                   )}
                   <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-bold">${plan.price}</span>
-                    <span className="text-white/80">/{billingCycle === 'monthly' ? 'mo' : 'yr'}</span>
-                  </div>
+  <span className="text-5xl font-bold">₵{plan.price.toLocaleString()}</span>
+  <span className="text-white/80">/{billingCycle === 'monthly' ? 'mo' : 'yr'}</span>
+</div>
                   {plan.savings && (
                     <p className="text-green-300 text-sm mt-2 font-semibold">{plan.savings}</p>
                   )}
@@ -251,19 +251,23 @@ export default function PricingPage() {
                     Contact Sales
                   </Link>
                 ) : plan.name === 'Basic' ? (
-                  <Link
-                    href="/activate"
-                    className="block w-full py-4 rounded-xl font-bold text-center bg-gradient-to-r from-gray-500 to-gray-600 text-white hover:shadow-2xl transition-all"
-                  >
-                    Get Started Free
-                  </Link>
-                ) : (
-                  <Link
-                    href="/activate"
-                    className="block w-full py-4 rounded-xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-2xl transition-all"
-                  >
-                    {plan.cta}
-                  </Link>
+  <PaystackButton
+    plan="basic"
+    amount={plan.price}
+    billingCycle={billingCycle}
+    className="w-full py-4 rounded-xl font-bold bg-gradient-to-r from-gray-500 to-gray-600 text-white hover:shadow-2xl transition-all"
+  >
+    {plan.cta}
+  </PaystackButton>
+) : (
+                  <PaystackButton
+    plan={plan.name.toLowerCase() as any}
+    amount={plan.price}
+    billingCycle={billingCycle}
+    className="w-full py-4 rounded-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-2xl transition-all"
+  >
+    {plan.cta}
+  </PaystackButton>
                 )}
               </div>
             </div>
@@ -297,9 +301,9 @@ export default function PricingPage() {
                   {addon.description}
                 </p>
                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">
-                  ${addon.price}
-                  <span className="text-sm text-gray-500 dark:text-gray-400 font-normal">/one-time</span>
-                </div>
+  ₵{addon.price.toLocaleString()}
+  <span className="text-sm text-gray-500 dark:text-gray-400 font-normal">/one-time</span>
+</div>
                 <ul className="space-y-2 mb-4">
                   {addon.features.map((feature, featureIdx) => (
                     <li key={featureIdx} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">

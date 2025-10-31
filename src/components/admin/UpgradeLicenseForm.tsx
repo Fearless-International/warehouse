@@ -3,12 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Crown, Zap, Package, DollarSign } from 'lucide-react';
-
-const LICENSE_PRICES = {
-  basic: { monthly: 19, yearly: 197 },
-  professional: { monthly: 49, yearly: 497 },
-  enterprise: { monthly: 149, yearly: 1497 }
-};
+import { LICENSE_PRICES, CURRENCY_SYMBOL } from '@/lib/constants/pricing';
 
 export default function UpgradeLicenseForm({ license }: any) {
   const [selectedPlan, setSelectedPlan] = useState(license.licenseType);
@@ -16,8 +11,7 @@ export default function UpgradeLicenseForm({ license }: any) {
   const [error, setError] = useState('');
   const router = useRouter();
 
- // Detect billing cycle
- // At the top of the component, after state declarations:
+  // Detect billing cycle
   const currentAmount = license.amount || LICENSE_PRICES[license.licenseType as keyof typeof LICENSE_PRICES]?.yearly || 0;
   let billingCycle: 'monthly' | 'yearly' = 'yearly';
   
@@ -33,16 +27,16 @@ export default function UpgradeLicenseForm({ license }: any) {
     { value: 'enterprise', label: 'Enterprise', icon: Crown, color: 'from-orange-500 to-red-500' }
   ];
 
+  // Update these functions:
+  const getCurrentPrice = () => LICENSE_PRICES[license.licenseType as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
+  const getNewPrice = () => LICENSE_PRICES[selectedPlan as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
+  const getNewTotal = () => {
+    const current = currentAmount || getCurrentPrice();
+    const difference = getNewPrice() - getCurrentPrice();
+    return current + difference;
+  };
+  const getPriceDifference = () => getNewPrice() - getCurrentPrice();
 
-// Update these functions:
-const getCurrentPrice = () => LICENSE_PRICES[license.licenseType as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
-const getNewPrice = () => LICENSE_PRICES[selectedPlan as keyof typeof LICENSE_PRICES]?.[billingCycle] || 0;
-const getNewTotal = () => {
-  const current = currentAmount || getCurrentPrice();
-  const difference = getNewPrice() - getCurrentPrice();
-  return current + difference;
-};
-const getPriceDifference = () => getNewPrice() - getCurrentPrice();
   const handleUpgrade = async () => {
     if (selectedPlan === license.licenseType) {
       alert('Please select a different plan');
@@ -51,8 +45,8 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
 
     const difference = getPriceDifference();
     const confirmMsg = difference > 0 
-      ? `Upgrade will add $${difference} to the license. New total: $${getNewTotal()}. Continue?`
-      : `Downgrade will refund $${Math.abs(difference)}. New total: $${getNewTotal()}. Continue?`;
+      ? `Upgrade will add ${CURRENCY_SYMBOL}${difference.toLocaleString()} to the license. New total: ${CURRENCY_SYMBOL}${getNewTotal().toLocaleString()}. Continue?`
+      : `Downgrade will refund ${CURRENCY_SYMBOL}${Math.abs(difference).toLocaleString()}. New total: ${CURRENCY_SYMBOL}${getNewTotal().toLocaleString()}. Continue?`;
 
     if (!confirm(confirmMsg)) return;
 
@@ -69,7 +63,7 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
       const data = await res.json();
 
       if (res.ok) {
-        alert(`✅ License upgraded successfully!\n\nOld Amount: $${data.oldAmount}\nNew Amount: $${data.newAmount}\nDifference: $${data.amountAdded}`);
+        alert(`✅ License upgraded successfully!\n\nOld Amount: ${CURRENCY_SYMBOL}${data.oldAmount.toLocaleString()}\nNew Amount: ${CURRENCY_SYMBOL}${data.newAmount.toLocaleString()}\nDifference: ${CURRENCY_SYMBOL}${data.amountAdded.toLocaleString()}`);
         router.push('/admin/licenses/active');
         router.refresh();
       } else {
@@ -107,7 +101,9 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
               </p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-green-600">${currentAmount}</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {CURRENCY_SYMBOL}{currentAmount.toLocaleString()}
+              </p>
               <p className="text-xs text-gray-500">{billingCycle}</p>
             </div>
           </div>
@@ -150,7 +146,9 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
                 <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
                   {plan.label}
                 </p>
-                <p className="text-lg font-bold text-blue-600">${planPrice}</p>
+                <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                  {CURRENCY_SYMBOL}{planPrice.toLocaleString()}
+                </p>
               </button>
             );
           })}
@@ -169,17 +167,23 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-gray-700 dark:text-gray-300">Current Amount:</span>
-                <span className="font-bold text-gray-900 dark:text-white">${currentAmount}</span>
+                <span className="font-bold text-gray-900 dark:text-white">
+                  {CURRENCY_SYMBOL}{currentAmount.toLocaleString()}
+                </span>
               </div>
               
               <div className="flex justify-between items-center">
                 <span className="text-gray-700 dark:text-gray-300">Current Plan Price:</span>
-                <span className="font-bold text-gray-900 dark:text-white">${getCurrentPrice()}</span>
+                <span className="font-bold text-gray-900 dark:text-white">
+                  {CURRENCY_SYMBOL}{getCurrentPrice().toLocaleString()}
+                </span>
               </div>
               
               <div className="flex justify-between items-center">
                 <span className="text-gray-700 dark:text-gray-300">New Plan Price:</span>
-                <span className="font-bold text-gray-900 dark:text-white">${getNewPrice()}</span>
+                <span className="font-bold text-gray-900 dark:text-white">
+                  {CURRENCY_SYMBOL}{getNewPrice().toLocaleString()}
+                </span>
               </div>
               
               <div className="border-t-2 border-blue-300 dark:border-blue-700 pt-2 mt-2"></div>
@@ -187,13 +191,15 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
               <div className="flex justify-between items-center">
                 <span className="text-gray-700 dark:text-gray-300">Difference:</span>
                 <span className={`font-bold ${getPriceDifference() >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {getPriceDifference() >= 0 ? '+' : ''}${getPriceDifference()}
+                  {getPriceDifference() >= 0 ? '+' : ''}{CURRENCY_SYMBOL}{getPriceDifference().toLocaleString()}
                 </span>
               </div>
               
               <div className="flex justify-between items-center text-lg">
                 <span className="font-bold text-blue-900 dark:text-blue-100">New Total:</span>
-                <span className="font-bold text-blue-900 dark:text-blue-100 text-2xl">${getNewTotal()}</span>
+                <span className="font-bold text-blue-900 dark:text-blue-100 text-2xl">
+                  {CURRENCY_SYMBOL}{getNewTotal().toLocaleString()}
+                </span>
               </div>
             </div>
           </div>
@@ -220,7 +226,7 @@ const getPriceDifference = () => getNewPrice() - getCurrentPrice();
           disabled={loading || selectedPlan === license.licenseType}
           className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
-          {loading ? '⏳ Upgrading...' : `✨ Upgrade & Add $${getPriceDifference() > 0 ? getPriceDifference() : 0}`}
+          {loading ? '⏳ Upgrading...' : `✨ Upgrade & Add ${CURRENCY_SYMBOL}${getPriceDifference() > 0 ? getPriceDifference().toLocaleString() : 0}`}
         </button>
         <button
           onClick={() => router.back()}

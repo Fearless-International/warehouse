@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sparkles, Key, Loader, CheckCircle, XCircle } from 'lucide-react';
+import { LICENSE_PRICES, CURRENCY_SYMBOL } from '@/lib/constants/pricing'
 
 export default function GenerateLicensePage() {
   const router = useRouter();
@@ -14,8 +15,9 @@ export default function GenerateLicensePage() {
     clientEmail: '',
     clientCompany: '',
     licenseType: 'basic',
+    billingCycle: 'yearly',
     expiryDate: '',
-    amount: '',
+    amount: LICENSE_PRICES.professional.yearly, // ✅ Use constant
     notes: ''
   });
 
@@ -46,8 +48,9 @@ export default function GenerateLicensePage() {
             clientEmail: '',
             clientCompany: '',
             licenseType: 'basic',
+            billingCycle: 'yearly',
             expiryDate: '',
-            amount: '',
+            amount: LICENSE_PRICES.professional.yearly, // ✅ Use constant
             notes: ''
           });
         }, 3000);
@@ -62,9 +65,21 @@ export default function GenerateLicensePage() {
   };
 
   const planPricing = {
-    basic: 297,
-    professional: 597,
-    enterprise: 1497
+    basic: { monthly: 19, yearly: 297 },
+    professional: { monthly: 49, yearly: 597 },
+    enterprise: { monthly: 149, yearly: 1497 }
+  };
+
+  const handleLicenseTypeChange = (type: string) => {
+    const cycle = formData.billingCycle as 'monthly' | 'yearly';
+    const newAmount = planPricing[type as keyof typeof planPricing][cycle];
+    setFormData({ ...formData, licenseType: type, amount: newAmount.toString() });
+  };
+
+  const handleBillingCycleChange = (cycle: string) => {
+    const type = formData.licenseType;
+    const newAmount = planPricing[type as keyof typeof planPricing][cycle as 'monthly' | 'yearly'];
+    setFormData({ ...formData, billingCycle: cycle, amount: newAmount.toString() });
   };
 
   return (
@@ -145,33 +160,39 @@ export default function GenerateLicensePage() {
                   License Type *
                 </label>
                 <select
-                  value={formData.licenseType}
-                  onChange={(e) => setFormData({
-                    ...formData, 
-                    licenseType: e.target.value,
-                    amount: planPricing[e.target.value as keyof typeof planPricing].toString()
-                  })}
-                  className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
-                  required
-                >
-                  <option value="basic">Basic - $297</option>
-                  <option value="professional">Professional - $597</option>
-                  <option value="enterprise">Enterprise - $1,497</option>
-                </select>
+  value={formData.licenseType}
+  onChange={(e) => handleLicenseTypeChange(e.target.value)}
+  className="w-full px-4 py-2 border-2 rounded-lg dark:bg-gray-700 dark:text-white"
+>
+  <option value="basic">Basic - ₵{LICENSE_PRICES.basic[formData.billingCycle as 'monthly' | 'yearly'].toLocaleString()}</option>
+  <option value="professional">Professional - ₵{LICENSE_PRICES.professional[formData.billingCycle as 'monthly' | 'yearly'].toLocaleString()}</option>
+  <option value="enterprise">Enterprise - ₵{LICENSE_PRICES.enterprise[formData.billingCycle as 'monthly' | 'yearly'].toLocaleString()}</option>
+</select>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Amount ($)
+                  Billing Cycle *
                 </label>
-                <input
-                  type="number"
-                  value={formData.amount}
-                  onChange={(e) => setFormData({...formData, amount: e.target.value})}
+                <select
+                  value={formData.billingCycle}
+                  onChange={(e) => handleBillingCycleChange(e.target.value)}
                   className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
-                  placeholder="297"
-                  step="0.01"
-                />
+                  required
+                >
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly (Save 20%)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Amount (₵)</label>
+<input
+  type="number"
+  value={formData.amount}
+  onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
+  className="w-full px-4 py-2 border-2 rounded-lg dark:bg-gray-700 dark:text-white"
+/>
               </div>
 
               <div>
@@ -187,7 +208,7 @@ export default function GenerateLicensePage() {
                 <p className="text-xs text-gray-500 mt-1">Leave empty for lifetime license</p>
               </div>
 
-              <div>
+              <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Notes (Optional)
                 </label>
